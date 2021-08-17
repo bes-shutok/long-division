@@ -1,4 +1,4 @@
-package ua.com.foxminded.division;
+package ua.com.foxminded.division.formatter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -6,6 +6,8 @@ import java.util.StringJoiner;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import ua.com.foxminded.division.dto.LongDivision;
 
 class LongDivisionFormatterTest {
     
@@ -24,7 +26,6 @@ class LongDivisionFormatterTest {
 	    .add(" ---|1")
 	    .add("   0")
 	    .toString();
-    
     
     final static String RESULT_10_BY_9 = 
 	    new StringJoiner("\n")
@@ -65,32 +66,32 @@ class LongDivisionFormatterTest {
 	    .add("     104")
 	    .toString();
     
-    private LongDivisionFormatter formatter;
+    private Formatter formatter;
     
     @BeforeEach
     void testSetUp() {
 	formatter = new LongDivisionFormatter();
     }
 
-    @Test //@Disabled
+    @Test
     void shouldFormatForOneDivision() {
 	LongDivision longDivision = new LongDivision(10, 2, 5, new int[] {10}, new int[] {10}, new int[] {0});
 	assertEquals(RESULT_10_BY_2, formatter.format(longDivision));
     }
     
-    @Test //@Disabled
+    @Test
     void shouldFormatForMultidigitDivision() {
 	LongDivision longDivision = new LongDivision(312, 312, 1, new int[] {312}, new int[] {312}, new int[] {0});
 	assertEquals(RESULT_312_BY_312, formatter.format(longDivision));
     }    
 
-    @Test //@Disabled
+    @Test
     void shouldFormatForFewDigitNumeratorAndOneDigitDenominator() {
 	LongDivision longDivision = new LongDivision(10, 9, 1, new int[] {10}, new int[] {9}, new int[] {1});
 	assertEquals(RESULT_10_BY_9, formatter.format(longDivision));
     }
     
-    @Test //@Disabled
+    @Test
     void shouldFormatForOneDigitDenominatorMultiSteps() {
 	int[] perStepMinuends = new int[] {7, 38, 29, 14, 25};
 	int[] perStepSubtrahends = new int[] {4, 36, 28, 12, 24};
@@ -99,7 +100,7 @@ class LongDivisionFormatterTest {
 	assertEquals(RESULT_78945_BY_4, formatter.format(longDivision));
     }    
     
-    @Test //@Disabled
+    @Test
     void shouldFormatForMultidigitDenominatorMultiSteps() {
 	int[] perStepMinuends = new int[] {312, 2600};
 	int[] perStepSubtrahends = new int[] {312, 2496};

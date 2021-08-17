@@ -1,4 +1,4 @@
-package ua.com.foxminded.division;
+package ua.com.foxminded.division.dto;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -23,11 +23,11 @@ public class LongDivision {
     private final String[] perStepSubtrahends;
     private final String[] perStepDifferences;
 
-    public LongDivision(int aNumerator, int aDenominator, int aQuotient, int[] perStepMinuends,
+    public LongDivision(int numerator, int denominator, int quotient, int[] perStepMinuends,
 	    int[] perStepSubtrahends, int[] perStepDifference) {
-	this.numerator = String.valueOf(aNumerator);
-	this.denominator = String.valueOf(aDenominator);
-	this.quotient = String.valueOf(aQuotient);
+	this.numerator = String.valueOf(numerator);
+	this.denominator = String.valueOf(denominator);
+	this.quotient = String.valueOf(quotient);
 	this.perStepMinuends = Arrays.stream(perStepMinuends)
 		.mapToObj(String::valueOf)
 		.toArray(String[]::new);

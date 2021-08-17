@@ -1,17 +1,16 @@
-package ua.com.foxminded.division;
+package ua.com.foxminded.division.calculator;
 
 import java.util.Arrays;
 
-public class LongDivisionCalculator {
+import ua.com.foxminded.division.dto.LongDivision;
 
-    public static final String DENOMINATOR_ZERO = "Denominator cannot be 0!";
-    
-    public LongDivision calculate(int aNumerator, int aDenominator) {
-	int numerator = aNumerator;
+public class LongDivisionCalculator implements Calculator {
+
+    @Override
+    public LongDivision calculate(int numerator, int denominator) {
 	String numeratorString = String.valueOf(numerator);	
 	int numeratorStart = 0;
 	
-	int denominator = aDenominator;
 	if (denominator == 0) {
 	    throw new IllegalArgumentException(DENOMINATOR_ZERO);
 	}
@@ -30,6 +29,7 @@ public class LongDivisionCalculator {
 	    if (multiplier != 0) {
 		int stepSubtrahend = denominator * multiplier;
 		perStepSubtrahends[longDivisionStep] = stepSubtrahend;
+		
 		int stepMinuend = getStepMinuend(previouseStepDifferenceString, numeratorString.substring(numeratorStart), stepSubtrahend);
 		perStepMinuends[longDivisionStep] = stepMinuend;
 		

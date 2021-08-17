@@ -1,63 +1,61 @@
-package ua.com.foxminded.division;
+package ua.com.foxminded.division.formatter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
-public class LongDivisionFormatter {
+import ua.com.foxminded.division.dto.LongDivision;
+
+public class LongDivisionFormatter implements Formatter {
 
     private static final char ROW_SEPARATOR = '|';
     private static final char STEP_SEPARATOR = '-';
     private static final char STEP_NUMBER_PREFIX = '_';
     private static final char END_OF_LINE = '\n';
 
-    private String numerator;
-    private String denominator;
-    private String quotient;
-    private String[] perStepMinuends;
-    private String[] perStepSubtrahends;
-    private String[] perStepDifferences;
-    private String leftHeader;
-    private int leftHeaderLength;
-
-    private int leftPadding = 0;
-
+    @Override
     public String format(LongDivision longDivision) {
-	this.numerator = longDivision.getNumerator();
-	this.denominator = longDivision.getDenominator();
-	this.quotient = longDivision.getQuotient();
-	this.perStepMinuends = longDivision.getPerStepMinuends();
-	this.perStepSubtrahends =longDivision.getPerStepSubtrahends();
-	this.perStepDifferences = longDivision.getPerStepDifferences();
-	this.leftHeader = STEP_NUMBER_PREFIX + numerator;
-	this.leftHeaderLength = leftHeader.length();
-	String line1 = getFirstLine();
-	String line2 = getSecondLine();
-	String line3 = getThirdLine();
-	String theRest = getTheRestLines();
+	String denominator = longDivision.getDenominator();
+	String quotient = longDivision.getQuotient();
+	String[] perStepMinuends = longDivision.getPerStepMinuends();
+	String[] perStepSubtrahends =longDivision.getPerStepSubtrahends();
+	String[] perStepDifferences = longDivision.getPerStepDifferences();
+	String leftHeader = STEP_NUMBER_PREFIX + longDivision.getNumerator();
+	int leftHeaderLength = leftHeader.length();
+	
+	String line1 = getFirstLine(leftHeader, denominator);
+	String line2 = getSecondLine(
+		perStepMinuends[0],
+		perStepSubtrahends[0],
+		leftHeaderLength,
+		Math.max(quotient.length(), denominator.length())
+		);
+	String line3 = getThirdLine(perStepMinuends[0].length(), leftHeaderLength, quotient);
+	String theRest = getTheRestLines(perStepMinuends, perStepSubtrahends, perStepDifferences);
 	return line1 + line2 + line3 + theRest;
     }
 
-    private String getFirstLine() {
+    private String getFirstLine(String leftHeader, String denominator) {
 	return new StringJoiner(ROW_SEPARATOR + "").add(leftHeader).add(denominator + END_OF_LINE).toString();
     }
 
-    private String getSecondLine() {
-	int subtrahendPadding = perStepMinuends[0].length() - perStepSubtrahends[0].length();
-	String leftHeader2 = fillWithSpaces(1 + subtrahendPadding) + perStepSubtrahends[0];
+    private String getSecondLine(String firstMinuend, String firstSubtrahend, int leftHeaderLength, int rightHeaderLength) {
+	int subtrahendPadding = firstMinuend.length() - firstSubtrahend.length();
+	String leftHeader2 = fillWithSpaces(1 + subtrahendPadding) + firstSubtrahend;
 	leftHeader2 = padRight(leftHeader2, leftHeaderLength);
-	String rightHeader2 = fillWith(Math.max(quotient.length(), denominator.length()), STEP_SEPARATOR);
+	String rightHeader2 = fillWith(rightHeaderLength, STEP_SEPARATOR);
 	return new StringJoiner(ROW_SEPARATOR + "").add(leftHeader2).add(rightHeader2 + END_OF_LINE).toString();
     }
 
-    private String getThirdLine() {
-	String leftHeader3 = " " + fillWith(perStepMinuends[0].length(), STEP_SEPARATOR);
+    private String getThirdLine(int firstMinuendLength, int leftHeaderLength, String quotient) {
+	String leftHeader3 = " " + fillWith(firstMinuendLength, STEP_SEPARATOR);
 	leftHeader3 = padRight(leftHeader3, leftHeaderLength);
 	return new StringJoiner(ROW_SEPARATOR + "").add(leftHeader3).add(quotient + END_OF_LINE).toString();
     }
 
-    private String getTheRestLines() {
+    private String getTheRestLines(String[] perStepMinuends, String[] perStepSubtrahends, String[] perStepDifferences) {
+	int leftPadding = 0;
 	List<String> stepDivisionLines = new ArrayList<>();
 	int lastIndex = perStepDifferences.length - 1;
 	
@@ -95,9 +93,5 @@ public class LongDivisionFormatter {
 
     private String fillWith(int length, char padSymbol) {
 	return fillWithSpaces(length).replace(' ', padSymbol);
-    }
-
-    public static final void main(String[] args) {
-	
     }
 }
