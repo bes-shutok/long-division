@@ -3,6 +3,8 @@ package ua.com.foxminded.division.calculator;
 import ua.com.foxminded.division.dto.LongDivision;
 
 public class LongDivisionCalculator implements Calculator {
+    private static final String ZERO = "0";
+    private static final String EMPTY = "";
 
     @Override
     public LongDivision calculate(int numerator, int denominator) {
@@ -10,7 +12,7 @@ public class LongDivisionCalculator implements Calculator {
 	String numeratorString = String.valueOf(numerator);	
 	int numeratorStart = 0;
 	int quotient = numerator / denominator;
-	int steps = String.valueOf(quotient).replaceAll("0", "").length();
+	int steps = String.valueOf(quotient).replaceAll(ZERO, EMPTY).length();
 	char[] qChars = String.valueOf(quotient).toCharArray();	
 	int[] perStepMinuends = new int[steps];
 	int[] perStepSubtrahends = new int[steps];
@@ -40,7 +42,7 @@ public class LongDivisionCalculator implements Calculator {
     }
 
     private int getStepMinuend(int stepDifference, String numeratorLeftoverString, int stepSubtrahend) {
-	String previouseStepDifferenceString = stepDifference == 0 ? "" : String.valueOf(stepDifference);
+	String previouseStepDifferenceString = stepDifference == 0 ? EMPTY : String.valueOf(stepDifference);
 	int stepSubtrahendLength = length(stepSubtrahend);
 	int minuendLeftoverLength = stepSubtrahendLength - previouseStepDifferenceString.length();
 	int thisStepMinuendCandidate = Integer.parseInt(previouseStepDifferenceString + numeratorLeftoverString.substring(0, minuendLeftoverLength));
