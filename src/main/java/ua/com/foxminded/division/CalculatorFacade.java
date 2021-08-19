@@ -15,7 +15,7 @@ public class CalculatorFacade {
 	this.formatter = formatter;
     }
     
-    String longDivision(int numerator, int denominator) {
+    String division(int numerator, int denominator) {
 	return formatter.format(calculator.calculate(numerator, denominator));
     }
 }
